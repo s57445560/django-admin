@@ -27,3 +27,9 @@ admin_web是什么？
 		# filter_horizontal 复选框的格式
 		# one_field 表示只能唯一的字段
 		# note_field 显示鼠标悬停的效果，默认使用note的表字段来做效果，也可以自定义，这个为一个str
+
+		在项目内的urls.py中添加 king_adminurl分支。
+		url(r'king_admin/', include('king_admin.urls')),
+
+		查询表信息的规则是:
+		http://127.0.0.1:8000/king_admin/项目名/项目下的表
