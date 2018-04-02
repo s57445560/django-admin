@@ -63,3 +63,9 @@ admin_web是什么？
 
 		通过对表内添加数据来控制用户权限
 		permission.py 内的 user字段在应用场景的时候需要修改为session内获取
+
+
+		使用装饰器来对视图做权限认证
+
+		from king_admin import permission
+		@permission.check_permission		# 装饰器名称
