@@ -196,7 +196,7 @@ def get_m2m(admin_class,input,form_obj):
     '''返回m2m的所有待选数据'''
     field_obj = getattr(admin_class.module, input.name)
     # 所有数据
-    all_data_list = field_obj.rel.to.objects.all()
+    all_data_list = field_obj.rel.model.objects.all()
     if form_obj.instance.id:
         obj = getattr(form_obj.instance, input.name)
         # 所有选中数据

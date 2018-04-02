@@ -6,7 +6,7 @@ GENDER_CHOICE = (
 class UserInfo(models.Model):
     user = models.CharField(verbose_name="用户名", max_length=32)
     passwd = models.CharField(verbose_name="密码",max_length=32)
-    role = models.ForeignKey('Direction',null=True,verbose_name="角色")
+    role = models.ForeignKey('Direction',null=True,verbose_name="角色",on_delete=models.CASCADE)
     gender = models.CharField(verbose_name="位置", max_length=4, choices=GENDER_CHOICE, default="F")
     tags = models.ManyToManyField('IP_host',verbose_name="主机")
     def __str__(self):

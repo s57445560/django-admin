@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.safestring import mark_safe
 from django.db.models import Q
 from king_admin.form import dynamic_class
+from king_admin import permission
 
 def index(request):
     request.session["url"] = {'/king_admin/admin_a/ip_host/':'ip表','/king_admin/admin_a/userinfo/':'用户表','/index/':'仪表盘'}
@@ -11,6 +12,7 @@ def index(request):
 
 
 # 返回表格信息的视图
+@permission.check_permission
 def table_obj(request,app_name, table_name):
     module_s = __import__('%s.models' % app_name)
     admin_class = king_admin.register_dic[app_name][table_name]
@@ -143,6 +145,7 @@ def table_obj(request,app_name, table_name):
 
 
 # 修改表时的视图
+@permission.check_permission
 def table_obj_change(request,app_name, table_name, first_field):
     referer = request.session.get("get_str")
     one_list = []
@@ -179,6 +182,7 @@ def table_obj_change(request,app_name, table_name, first_field):
 
 
 # 添加时的视图
+@permission.check_permission
 def table_obj_add(request,app_name,table_name):
     one_list = []
     admin_class = king_admin.register_dic[app_name][table_name]
@@ -208,6 +212,7 @@ def table_obj_add(request,app_name,table_name):
                                                       "admin_class":admin_class})
 
 # 删除时的视图
+@permission.check_permission
 def table_obj_delete(request,app_name,table_name,obj_id):
     admin_class = king_admin.register_dic[app_name][table_name]
     obj = admin_class.module.objects.get(id=obj_id)

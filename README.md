@@ -33,3 +33,33 @@ admin_web是什么？
 
 		查询表信息的规则是:
 		http://127.0.0.1:8000/king_admin/项目名/项目下的表
+
+
+权限说明
+-------
+		king_admin/permission_list.py 写权限的格式
+		perm_dic={
+		 
+		    'crm_table_index':['table_index','GET',[],{},],  #可以查看CRM APP里所有数据库表
+		    'crm_table_list':['table_list','GET',[],{}],    #可以查看每张表里所有的数据
+		    'crm_table_list_view':['table_change','GET',[],{}],#可以访问表里每条数据的修改页
+		    'crm_table_list_change':['table_change','POST',[],{}], #可以对表里的每条数据进行修改
+		 
+		    }
+		　　
+		
+		字典里的key是权限名， 一会我们需要用过这些权限名来跟用户进行关联
+		
+		后面values列表里第一个值如'table_index'是django中的url name，在这里必须相对的url name,
+		而不是绝对url路径，因为考虑到django url正则匹配的问题，搞绝对路径，不好控制。 
+		values里第2个值是http请求方法
+		values里第3个[]是要求这个请求中必须带有某些参数，但不限定对数的值是什么
+		values里的第4个{}是要求这个请求中必须带有某些参数，并且限定所带的参数必须等于特定的值
+
+		king_admin 下有3张表
+		Group    组表
+		UserInfo 用户表
+		Control  权限设置表    表内code字段对应permission_list.py内的 key字段
+
+		通过对表内添加数据来控制用户权限
+		permission.py 内的 user字段在应用场景的时候需要修改为session内获取
