@@ -40,7 +40,7 @@ admin_web是什么？
 		king_admin/permission_list.py 写权限的格式
 		perm_dic={
 		 
-		    'crm_table_index':['table_index','GET',[],{},],  #可以查看CRM APP里所有数据库表
+		    'crm_table_index':['table_index','GET',[],{},custom_perm_logic.only_view_own_customers],  #可以查看CRM APP里所有数据库表
 		    'crm_table_list':['table_list','GET',[],{}],    #可以查看每张表里所有的数据
 		    'crm_table_list_view':['table_change','GET',[],{}],#可以访问表里每条数据的修改页
 		    'crm_table_list_change':['table_change','POST',[],{}], #可以对表里的每条数据进行修改
@@ -55,6 +55,7 @@ admin_web是什么？
 		values里第2个值是http请求方法
 		values里第3个[]是要求这个请求中必须带有某些参数，但不限定对数的值是什么
 		values里的第4个{}是要求这个请求中必须带有某些参数，并且限定所带的参数必须等于特定的值
+		values里的第5个{}是钩子函数，可以写业务逻辑的权限控制，粒度更细。此此函数也可以不加
 
 		king_admin 下有3张表
 		Group    组表
@@ -63,6 +64,7 @@ admin_web是什么？
 
 		通过对表内添加数据来控制用户权限
 		permission.py 内的 user字段在应用场景的时候需要修改为session内获取
+		custom_perm_logic.py 写业务逻辑的权限控制，返回要求为 True 或 False
 
 
 		使用装饰器来对视图做权限认证

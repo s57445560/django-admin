@@ -13,7 +13,7 @@ def perm_check(*args,**kwargs):
     #match_flag = False
     match_key = None
     permission_list = []
-    user = "sunyang"
+    request.session["user"] = "sunyang"
     match_results = [False]
 
 
@@ -23,6 +23,7 @@ def perm_check(*args,**kwargs):
         per_method  = permission_val[1]
         perm_args = permission_val[2]
         perm_kwargs = permission_val[3]
+        custom_perm_func = None if len(permission_val) == 4 else permission_val[4]
 
         if per_url_name == current_url_name: #matches current request url
             if per_method == request.method: #matches request method
@@ -54,9 +55,20 @@ def perm_check(*args,**kwargs):
                 else:
                     kwargs_matched = True
 
+                #自定义权限钩子
+                perm_func_matched = False
+                if custom_perm_func:
+                    if  custom_perm_func(request,args,kwargs):
+                        perm_func_matched = True
+                    else:
+                        perm_func_matched = False #使整条权限失效
+
+                else: #没有定义权限钩子，所以默认通过
+                    perm_func_matched = True
 
 
-                match_results = [args_matched,kwargs_matched]
+
+                match_results = [args_matched,kwargs_matched,perm_func_matched]
                 print("--->match_results ", match_results)
                 if all(match_results): #都匹配上了
                     match_key = permission_key
@@ -66,7 +78,7 @@ def perm_check(*args,**kwargs):
 
 
     if all(match_results):
-        b1 = models.UserInfo.objects.filter(user=user).last()
+        b1 = models.UserInfo.objects.filter(user=request.session.get('user',None)).last()
         if not b1:
             return False
 
